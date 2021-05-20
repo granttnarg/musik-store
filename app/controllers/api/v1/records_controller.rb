@@ -1,4 +1,4 @@
-class RecordsController < ApplicationController
+class Api::V1::RecordsController < ApplicationController
   def index
     render json: Record.all
   end
@@ -9,10 +9,10 @@ class RecordsController < ApplicationController
     if record.save
       render json: record, status: :created
     else 
-      render json: record.errors, status: :unprocessable_entity
+      render json: record.errors.full_messages.join(", "), status: :unprocessable_entity
     end
   end
-
+ 
   private
   def record_params
     params.require(:record).permit(:title, :description)
