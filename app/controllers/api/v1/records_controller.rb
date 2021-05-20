@@ -18,7 +18,7 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   def destroy
     record = Record.find(params[:id]).destroy!
 
-    head :content
+    head :no_content
   end
  
   private
