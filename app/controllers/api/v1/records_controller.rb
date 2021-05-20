@@ -2,7 +2,9 @@ class Api::V1::RecordsController < ApplicationController
 rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
 
   def index
-    render json: Record.all
+    records = Record.all
+
+    render json: RecordsRepresenter.new(records).as_json
   end
 
   def create
