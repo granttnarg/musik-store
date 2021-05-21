@@ -1,8 +1,9 @@
 class Api::V1::RecordsController < ApplicationController
 rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+  DEFAULT_PAGINATION_LIMIT = 100
 
   def index
-    records = Record.all
+    records = Record.limit(limit).offset(params[:offset])
 
     render json: RecordsRepresenter.new(records).as_json
   end
@@ -25,6 +26,12 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   end
  
   private
+
+  def limit(value = DEFAULT_PAGINATION_LIMIT)
+    # set our pagination limit to 100 or use input
+    [ params.fetch(:limit, value).to_i, value ].min
+  end
+
   def record_params
     params.require(:record).permit(:title, :description, :id) 
   end 

@@ -34,6 +34,50 @@ describe 'Records API', type: :request do
           }
         ])
     end
+
+    it 'it returns a subset of records using pagination limit via params' do
+      get '/api/v1/records', params: { limit: 1 } 
+
+      expect(response).to have_http_status(:success)
+      expect(response_body.size).to eq(1)
+      expect(response_body).to eq( [
+        {
+          'id'=> 1,
+          'title' => 'This is a great song',
+          'description' => 'Here is some info about a great song',
+          'artist' => {
+            'name' => 'George Michael',
+            'bio' => 'Some info about George Michael',
+            'artist_id' => 1
+          }    
+        }
+      ])
+    end
+
+    it 'returns a subset of records based on limit and offset' do
+      get '/api/v1/records', params: { limit: 1, offset: 1 }
+      
+      expect(response).to have_http_status(:success)
+      expect(response_body.size).to eq(1)
+      expect(response_body).to eq([
+        {
+            'id'=> 2,
+            'title' => 'Another Hit',
+            'description' => 'Update info later',
+            'artist' => {
+              'name' => 'George Michael',
+              'bio' => 'Some info about George Michael',
+              'artist_id' => 1
+            }    
+          }
+      ])
+    end
+    
+    it 'returns records with a max limit fo 100' do
+      expect(Record).to receive(:limit).with(100).and_call_original 
+      
+      get '/api/v1/records', params: { limit: 999, offset: 1 } 
+    end
   end
 
   context 'POST /records' do
