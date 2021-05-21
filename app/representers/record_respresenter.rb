@@ -1,10 +1,9 @@
-class RecordsRepresenter
-  def initialize(records)
-    records.class == Record ? @records = [records] : @records = records
+class RecordRepresenter
+  def initialize(record)
+    @record = record
   end
 
   def as_json
-    records.map do |record|
       {
         id: record.id,
         title: record.title,
@@ -20,6 +19,6 @@ class RecordsRepresenter
   
   private
 
-  attr_reader :records
+  attr_reader :record
   
 end

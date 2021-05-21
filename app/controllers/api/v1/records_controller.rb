@@ -8,10 +8,11 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   end
 
   def create
-    record = Record.new(record_params)
+    artist = Artist.create!(artist_params)
+    record = Record.new(record_params.merge(artist_id: artist.id))
 
     if record.save
-      render json: record, status: :created
+      render json: RecordsRepresenter.new(record).as_json, status: :created
     else 
       render json: record.errors.full_messages.join(", "), status: :unprocessable_entity
     end
@@ -26,5 +27,9 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   private
   def record_params
     params.require(:record).permit(:title, :description, :id) 
-  end   
+  end 
+  
+  def artist_params
+    params.require(:artist).permit(:name, :bio, :id)
+  end 
 end
