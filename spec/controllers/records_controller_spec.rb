@@ -10,10 +10,12 @@ RSpec.describe Api::V1::RecordsController, type: :controller do
   end
 
   context 'POST create' do
+    let!(:user) { FactoryBot.create(:user, username: "Me", password: "password") }
     let(:record_name) { "Another Hit Record" }
     
     it 'calls SpotifyDataJob.perfom with the correct params' do
       expect(SpotifyDataJob).to receive(:perform_later).with(record_name)
+      request.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390"
       post :create, params: {
         artist: { name: "A Great Artist Name" },
         record: { title: record_name }

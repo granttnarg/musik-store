@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AuthenticationTokenService do
-  let(:user) { FactoryBot.create(:user, username: "Mr User") }
+  let(:user) { FactoryBot.create(:user, username: "Mr User", password: "password") }
 
   describe 'call' do
     let(:token) {described_class.call(user.id)}
