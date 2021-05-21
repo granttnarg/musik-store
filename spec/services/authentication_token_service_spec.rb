@@ -1,18 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe AuthenticationTokenService do
+  let(:user) { FactoryBot.create(:user, username: "Mr User") }
+
   describe 'call' do
-    let(:token) {described_class.call}
+    let(:token) {described_class.call(user.id)}
 
     it 'returns an authentication token' do
       decoded_token = JWT.decode(token,
-        HMAC_SECRET,
+        described_class::HMAC_SECRET,
         true,
-        { algorithm: ALOGRIYTHM_TYPE }
+        { algorithm: described_class::ALGORITHYM_TYPE }
       )
 
       expect(decoded_token).to eq([
-        {'test' => 'testing'},
+        {'user_id' => user.id},
         {'alg' => 'HS256'}
       ])
     end

@@ -2,10 +2,10 @@ class Api::V1::AuthenticationController < ApplicationController
   rescue_from ActionController::ParameterMissing, with: :parameter_missing
 
   def create
-    params.require(:username).inspect
+    user = User.find_by(username: params.require(:username))
     params.require(:password).inspect
-
-    render json: { token: '123' }, status: :created  
+    jwt_token = AuthenticationTokenService.call(user.id)
+    render json: { token: jwt_token }, status: :created  
   end
 
   private
