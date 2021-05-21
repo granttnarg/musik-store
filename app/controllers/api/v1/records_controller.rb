@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Api::V1::RecordsController < ApplicationController
 rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   DEFAULT_PAGINATION_LIMIT = 100
@@ -9,8 +11,15 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   end
 
   def create
-    artist = Artist.create!(artist_params)
+    if record_params[:artist_id].present?
+      artist = Artist.find(record_params[:artist_id])
+    else 
+      artist = Artist.create!(artist_params)
+    end 
     record = Record.new(record_params.merge(artist_id: artist.id))
+
+    #send request to spotify API
+    SpotifyDataJob.perform_later(record_params[:title])
 
     if record.save
       render json: RecordsRepresenter.new(record).as_json, status: :created
@@ -33,7 +42,7 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   end
 
   def record_params
-    params.require(:record).permit(:title, :description, :id) 
+    params.require(:record).permit(:title, :description, :id, :artist_id) 
   end 
   
   def artist_params
