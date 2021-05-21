@@ -1,24 +1,11 @@
 # README
+A Ruby on Rails backend API with a basic structure, created with TDD and full test suite. Simulated Side Job and JWT Auth set up for private endpoints. 
+Currently in progress and soon to be hooked up to a Vue front-end.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Using Rails 6, Ruby 2.6.7 
 
-Things you may want to cover:
+Don't forget to `bundle` and `rails db:migrate` 
 
-* Ruby version
+`bundle exec rspec spec` to run the test suite 
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Enjoy! 
