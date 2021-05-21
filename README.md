@@ -1,6 +1,7 @@
 # README
-A Ruby on Rails backend API with a basic structure, created with TDD and full test suite. Simulated Side Job, JSON Serialized Endpoints and JWT Auth set up for private endpoints. 
-Currently in progress for extension and soon to be hooked up to a Vue front-end.
+A Ruby on Rails backend Restful API with a basic crud structure and pagination created with TDD mindset and a full test suite. Simulated Side Job, JSON Serialized Endpoints and JWT Auth set up ready to go.
+
+Currently in development for extensions and soon to be hooked up to a Vue front-end.
 
 Using Rails 6, Ruby 2.6.7 
 
