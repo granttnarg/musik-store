@@ -72,12 +72,6 @@ describe 'Records API', type: :request do
           }
       ])
     end
-    
-    it 'returns records with a max limit fo 100' do
-      expect(Record).to receive(:limit).with(100).and_call_original 
-      
-      get '/api/v1/records', params: { limit: 999, offset: 1 } 
-    end
   end
 
   context 'POST /records' do
