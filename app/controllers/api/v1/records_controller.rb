@@ -25,7 +25,9 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
     record = Record.new(record_params.merge(artist_id: artist.id))
 
     #send request to spotify API
-    SpotifyDataJob.perform_later(record_params[:title])
+    # SpotifyDataJob.perform_later(record_params[:title])
+    SpotifyApiService.authorize
+    binding.pry
 
     if record.save
       render json: RecordsRepresenter.new(record).as_json, status: :created
@@ -37,7 +39,7 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   def destroy
     record = Record.find(params[:id]).destroy!
 
-    head :no_content
+    render json: { "status": "Record succesfully deleted" }, status: :ok
   end
  
   private
