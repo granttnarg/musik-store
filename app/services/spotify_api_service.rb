@@ -1,5 +1,6 @@
 require 'uri'
-require 'net/http'
+# require 'net/http'
+require 'httparty'
 
 class SpotifyApiService
 
@@ -27,20 +28,18 @@ class SpotifyApiService
   private
 
   def self.authorize
-    http = Net::HTTP.new("localhost", "3000")
-    uri = URI(AUTH_URI)
+    # http = Net::HTTP.new("localhost", "3000")
     encrypted_client_info = Base64.strict_encode64("#{CLIENT_ID}:#{CLIENT_SECRET}")
     
-
-    body = { "grant_type": "client_credientials" }
-
-    request = Net::HTTP::Post.new(uri)
+    # request = Net::HTTP::Post.new(uri)
     # set header
-    request["Authorization"] = "Basic#{encrypted_client_info}"
-    request.body = body
-    result = http.request(request)
-
-    binding.pry
+    # request["Authorization"] = "Basic #{encrypted_client_info}"
+    # request.body = body
+    # result = http.request(request)
+    response = HTTParty.post(AUTH_URI,
+              :body =>  "grant_type=client_credentials",
+              :headers => {"Authorization" => "Basic #{encrypted_client_info}" }
+    ) 
     # puts res.body if res.is_a?(Net::HTTPSuccess)
   end
 
