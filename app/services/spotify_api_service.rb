@@ -3,6 +3,7 @@ require 'uri'
 require 'httparty'
 
 class SpotifyApiService
+  attr_reader :access_token
 
   CLIENT_ID =  '74e55d3cff04495990229f6311be5d42'
   CLIENT_SECRET = 'fc560b0f942141d88c34d354ec7a9a4b'
@@ -11,38 +12,46 @@ class SpotifyApiService
   def initialize(client_id = CLIENT_ID, client_secret = CLIENT_SECRET)
     @client_id = client_id
     @client_secret = client_secret 
-    @auth_token = ''
-    @auth_token_expired = true
+    @access_token = nil
+    @token_expire_time = nil
+    @access_token_expired = true
+    @query = nil
   end 
 
   def search(query)
     ##send API call for search query
   end
 
-  def self.call(record_title)
-    authorize
+  def authorize
+    response = HTTParty.post(AUTH_URI,
+              :body =>  "grant_type=client_credentials",
+              :headers => {"Authorization" => "Basic #{encrypt_credentials(@client_id, @client_secret)}" }
+    )
+    return false if response["access_token"].nil? && response["token_type"].nil? && response["expires_in"].nil?
+    store_auth_token(response)
+    true
+  end 
 
-    "Api call for " + record_title + " successful" 
+  def store_auth_token(response)
+    if @access_token_expired
+      @access_token = response["access_token"]
+      expiry = Time.now + response["expires_in"].to_i 
+      @access_token_expired = expiry <= Time.now
+    end
+  end
+
+  def search_request(query)
+    query_string = URI.encode_www_form({q: query, type: "track"})
+    search_uri = "https://api.spotify.com/v1/search?#{query_string}"
+    response = HTTParty.get(search_uri,
+              :headers => {"Authorization" => "Bearer #{@access_token}" }
+    )
   end
 
   private
 
-  def self.authorize
-    # http = Net::HTTP.new("localhost", "3000")
-    encrypted_client_info = Base64.strict_encode64("#{CLIENT_ID}:#{CLIENT_SECRET}")
-    
-    # request = Net::HTTP::Post.new(uri)
-    # set header
-    # request["Authorization"] = "Basic #{encrypted_client_info}"
-    # request.body = body
-    # result = http.request(request)
-    response = HTTParty.post(AUTH_URI,
-              :body =>  "grant_type=client_credentials",
-              :headers => {"Authorization" => "Basic #{encrypted_client_info}" }
-    ) 
-    # puts res.body if res.is_a?(Net::HTTPSuccess)
+  def encrypt_credentials(id, secret)
+    Base64.strict_encode64("#{id}:#{secret}")
   end
-
-
 
 end

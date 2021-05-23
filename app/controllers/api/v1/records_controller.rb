@@ -1,14 +1,15 @@
 require 'net/http'
 
 class Api::V1::RecordsController < ApplicationController
-rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+  class AuthenticationError < StandardError; end
   include ActionController::HttpAuthentication::Token
+
+  rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+  rescue_from AuthenticationError, with: :handle_unauthenticated
 
   DEFAULT_PAGINATION_LIMIT = 100
 
   before_action :authenticate_user, only: [:create, :destroy] 
-
-
 
   def index
     records = Record.limit(limit).offset(params[:offset])
@@ -23,11 +24,6 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
       artist = Artist.create!(artist_params)
     end 
     record = Record.new(record_params.merge(artist_id: artist.id))
-
-    #send request to spotify API
-    # SpotifyDataJob.perform_later(record_params[:title])
-    SpotifyApiService.authorize
-    binding.pry
 
     if record.save
       render json: RecordsRepresenter.new(record).as_json, status: :created
@@ -64,5 +60,9 @@ rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   
   def artist_params
     params.require(:artist).permit(:name, :bio, :id)
+  end
+
+  def handle_not_authorized
+    render head :unauthorized
   end 
 end
