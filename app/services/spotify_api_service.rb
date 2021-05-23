@@ -46,6 +46,15 @@ class SpotifyApiService
     response = HTTParty.get(search_uri,
               :headers => {"Authorization" => "Bearer #{@access_token}" }
     )
+    binding.pry
+  end
+
+  def reccomendation_request(seed_artists, seed_genres, seed_tracks, limit)
+    query_string = URI.encode_www_form({ seed_artists: seed_artists, seed_genres: seed_genres, seed_tracks: seed_tracks, limit: limit })
+    search_uri = "https://api.spotify.com/v1/recommendations?#{query_string}"
+    response = HTTParty.get(search_uri,
+              :headers => {"Authorization" => "Bearer #{@access_token}" }
+    )
   end
 
   private
