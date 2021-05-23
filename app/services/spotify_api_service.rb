@@ -46,7 +46,6 @@ class SpotifyApiService
     response = HTTParty.get(search_uri,
               :headers => {"Authorization" => "Bearer #{@access_token}" }
     )
-    binding.pry
   end
 
   def reccomendation_request(seed_artists, seed_genres, seed_tracks, limit)
