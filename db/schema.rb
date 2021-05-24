@@ -10,13 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_24_174023) do
+ActiveRecord::Schema.define(version: 2021_05_24_213548) do
 
   create_table "artists", force: :cascade do |t|
     t.string "name"
     t.text "bio"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "favourite_count"
+  end
+
+  create_table "favourites", force: :cascade do |t|
+    t.integer "artist_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["artist_id"], name: "index_favourites_on_artist_id"
+    t.index ["user_id"], name: "index_favourites_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer "record_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["record_id"], name: "index_likes_on_record_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "records", force: :cascade do |t|
@@ -40,5 +59,9 @@ ActiveRecord::Schema.define(version: 2021_05_24_174023) do
     t.string "email"
   end
 
+  add_foreign_key "favourites", "artists"
+  add_foreign_key "favourites", "users"
+  add_foreign_key "likes", "records"
+  add_foreign_key "likes", "users"
   add_foreign_key "records", "artists"
 end
