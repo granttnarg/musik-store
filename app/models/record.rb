@@ -1,5 +1,6 @@
 class Record < ApplicationRecord
     belongs_to :artist
+    has_many :likes
         AVAILABLE_GENRES = [
         "ambient",
         "classical",
