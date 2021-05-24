@@ -55,7 +55,7 @@ class Api::V1::RecordsController < ApplicationController
   end
 
   def record_params
-    params.require(:record).permit(:title, :description, :id, :artist_id) 
+    params.require(:record).permit(:title, :description, :genre, :album, :artwork_url, :like_count, :id, :artist_id) 
   end 
   
   def artist_params
