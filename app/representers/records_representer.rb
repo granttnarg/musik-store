@@ -4,12 +4,14 @@ class RecordsRepresenter
   end
 
   def as_json
-    records.map do |record|
+    records_output = records.map do |record|
       {
         id: record.id,
         title: record.title,
         description: record.description,
         genre: record.genre,
+        album: record.album,
+        like_count: record.like_count,
         artist: {
           artist_id: record.artist_id,
           name: record.artist.name,
@@ -17,6 +19,13 @@ class RecordsRepresenter
         }
       }
     end
+    records_output.insert(0, {
+      meta: {
+        path: "api/v1/records",
+        endpoint_type: "public",
+        records: records.length
+      }
+    })
   end
   
   private
