@@ -9,6 +9,7 @@ class RecordsRepresenter
         id: record.id,
         title: record.title,
         description: record.description,
+        genre: record.genre,
         artist: {
           artist_id: record.artist_id,
           name: record.artist.name,

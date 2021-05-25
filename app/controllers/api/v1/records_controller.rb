@@ -13,7 +13,7 @@ class Api::V1::RecordsController < ApplicationController
 
   def index
     records = Record.limit(limit).offset(params[:offset])
-
+1
     render json: RecordsRepresenter.new(records).as_json
   end
 
@@ -24,7 +24,7 @@ class Api::V1::RecordsController < ApplicationController
       artist = Artist.create!(artist_params)
     end 
     record = Record.new(record_params.merge(artist_id: artist.id))
-
+    
     if record.save
       render json: RecordsRepresenter.new(record).as_json, status: :created
     else 

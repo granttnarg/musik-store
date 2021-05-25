@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe 'Records API', type: :request do
   let!(:artist) { FactoryBot.create(:artist, name: "George Michael", bio: "Some info about George Michael") }
-  let!(:record) { FactoryBot.create(:record, artist: artist, title: "This is a great song", description: "Here is some info about a great song") }
-  let!(:record_one) { FactoryBot.create(:record, artist: artist, title: "Another Hit", description: "Update info later") }
+  let!(:record) { FactoryBot.create(:record, artist: artist, genre: "pop", title: "This is a great song", description: "Here is some info about a great song") }
+  let!(:record_one) { FactoryBot.create(:record, artist: artist, genre: "pop", title: "Another Hit", description: "Update info later") }
   
   context 'GET /records' do
     it 'return all records' do
@@ -16,6 +16,7 @@ describe 'Records API', type: :request do
             'id'=> 1,
             'title' => 'This is a great song',
             'description' => 'Here is some info about a great song',
+            'genre' => 'pop',
             'artist' => {
               'name' => 'George Michael',
               'bio' => 'Some info about George Michael',
@@ -26,6 +27,7 @@ describe 'Records API', type: :request do
             'id'=> 2,
             'title' => 'Another Hit',
             'description' => 'Update info later',
+            'genre' => 'pop',
             'artist' => {
               'name' => 'George Michael',
               'bio' => 'Some info about George Michael',
@@ -45,6 +47,7 @@ describe 'Records API', type: :request do
           'id'=> 1,
           'title' => 'This is a great song',
           'description' => 'Here is some info about a great song',
+          'genre' => 'pop',
           'artist' => {
             'name' => 'George Michael',
             'bio' => 'Some info about George Michael',
@@ -64,6 +67,7 @@ describe 'Records API', type: :request do
             'id'=> 2,
             'title' => 'Another Hit',
             'description' => 'Update info later',
+            'genre' => 'pop',
             'artist' => {
               'name' => 'George Michael',
               'bio' => 'Some info about George Michael',
@@ -79,7 +83,7 @@ describe 'Records API', type: :request do
     it 'creates a new record' do
       expect {
         post '/api/v1/records', params: {
-          record: { title: "A Test Pressin", description: "A limited edition record"},
+          record: { title: "A Test Pressin", description: "A limited edition record", genre: "pop"},
           artist: { name: "A Fake Artist", bio: "Some detailed info about a fake artist"}
         }, headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390" }
         }.to change {Record.count}.by(1)
@@ -90,6 +94,7 @@ describe 'Records API', type: :request do
           'id'=> 3,
           'title' => 'A Test Pressin',
           'description' => 'A limited edition record',
+          'genre' => 'pop',
           'artist' => {
             'name' => 'A Fake Artist',
             'bio' => 'Some detailed info about a fake artist',
@@ -102,14 +107,14 @@ describe 'Records API', type: :request do
   context 'DELETE /records' do
     let!(:user) { FactoryBot.create(:user, username: "Me", password: "password") }
     let!(:artist_one) { FactoryBot.create(:artist, name: "KISS") }
-    let!(:record_two) { FactoryBot.create(:record, artist: artist_one, title: "This is a not so great song", description: "Here is some info about a not so great song") }
+    let!(:record_two) { FactoryBot.create(:record, artist: artist_one, genre: "rock", title: "This is a not so great song", description: "Here is some info about a not so great song") }
 
     it 'deleted a specific record entry' do
       expect do
         delete "/api/v1/records/#{record_one.id}", headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390" }
       end.to change { Record.count }.by(-1)
        
-      expect(response).to have_http_status(:no_content)
+      expect(response_body).to eq({ "status" => "Record succesfully deleted" })
     end
 
   end
