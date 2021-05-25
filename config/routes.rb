@@ -3,8 +3,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :records, only: [ :index, :create, :destroy ] do 
-        resources :likes, only:[:index, :create, :destroy]
+        resources :likes, only:[:create, :destroy]
       end
+      
+      resources :user, only: [:show] do
+        resources :likes, only: [:index]
+      end 
 
       post 'authenticate', to: 'authentication#create'
     end
