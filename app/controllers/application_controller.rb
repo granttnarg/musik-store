@@ -12,4 +12,12 @@ private
     def not_destroyed(error)
         render json: { errors: error.record.errors }, status: :unprocessable_entity
     end
+
+    def handle_not_authorized
+        render head :unauthorized
+      end
+      
+    def not_found
+        render status: :bad_request 
+    end
 end
