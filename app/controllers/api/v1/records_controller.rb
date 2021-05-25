@@ -7,8 +7,6 @@ class Api::V1::RecordsController < ApplicationController
   rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
   rescue_from AuthenticationError, with: :handle_unauthenticated
 
-  DEFAULT_PAGINATION_LIMIT = 100
-
   before_action :authenticate_user, only: [:create, :destroy] 
 
   def index
@@ -47,11 +45,6 @@ class Api::V1::RecordsController < ApplicationController
     User.find(user_id)
   rescue ActiveRecord::RecordNotFound
     render status: :unauthorized
-  end
-
-  def limit(value = DEFAULT_PAGINATION_LIMIT)
-    # set our pagination limit to 100 or use input
-    [ params.fetch(:limit, value).to_i, value ].min
   end
 
   def record_params
