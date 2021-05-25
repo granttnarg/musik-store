@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       end 
 
       post 'authenticate', to: 'authentication#create'
+      delete '/likes/:id', to: 'likes#destroy'
     end
   end
 end

@@ -8,7 +8,6 @@ class Api::V1::LikesController < ApplicationController
   end
 
   def create
-    
     if params.require([:record_id])
       record = Record.find(params.require([:record_id])).first
       like = Like.new(record: record, user: @current_user)
@@ -17,6 +16,7 @@ class Api::V1::LikesController < ApplicationController
     end
 
     if like.save
+      record.like_count + 1
       render json: LikeRepresenter.new(like).as_json, status: :created
     else
       render json: like.errors.full_messages.join(", "), status: :unprocessable_entity 
@@ -25,6 +25,16 @@ class Api::V1::LikesController < ApplicationController
   end
 
   def destroy
+    if params.require([:id]).present?
+      like = Like.find(params[:id])
+      record = Record.find(like.record_id)
+      artist = Artist.find(record.artist_id)
+      like.destroy
+      record.like_count - 1
+      render json: { "status": "You have unliked #{record.title} by #{artist.name}" }, status: :ok
+    else
+      render status: :bad_request 
+    end 
   end
 
   private

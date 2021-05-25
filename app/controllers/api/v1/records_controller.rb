@@ -5,6 +5,7 @@ class Api::V1::RecordsController < ApplicationController
   include ActionController::HttpAuthentication::Token
 
   rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from AuthenticationError, with: :handle_unauthenticated
 
   before_action :authenticate_user, only: [:create, :destroy] 
@@ -31,9 +32,12 @@ class Api::V1::RecordsController < ApplicationController
   end
 
   def destroy
-    record = Record.find(params[:id]).destroy!
-
-    render json: { "status": "Record succesfully deleted" }, status: :ok
+    if params[:id].present?
+      Record.find(params[:id]).destroy!
+      render json: { "status": "Record succesfully deleted" }, status: :ok
+    else
+      render status: :bad_request 
+    end 
   end
  
   private
@@ -54,8 +58,4 @@ class Api::V1::RecordsController < ApplicationController
   def artist_params
     params.require(:artist).permit(:name, :bio, :id)
   end
-
-  def handle_not_authorized
-    render head :unauthorized
-  end 
 end
