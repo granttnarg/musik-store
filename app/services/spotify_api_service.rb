@@ -3,8 +3,6 @@ require 'uri'
 require 'httparty'
 
 class SpotifyApiService
-  attr_reader :access_token
-
   CLIENT_ID =  '74e55d3cff04495990229f6311be5d42'
   CLIENT_SECRET = 'fc560b0f942141d88c34d354ec7a9a4b'
   AUTH_URI = 'https://accounts.spotify.com/api/token'
@@ -57,6 +55,8 @@ class SpotifyApiService
   end
 
   private
+
+  attr_reader :access_token
 
   def encrypt_credentials(id, secret)
     Base64.strict_encode64("#{id}:#{secret}")
