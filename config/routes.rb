@@ -10,7 +10,7 @@ Rails.application.routes.draw do
         resources :records, only: [:create]
       end
       
-      resources :user, only: [:show] do
+      resources :users, only: [:show] do
         resources :likes, only: [:index]
       end 
 

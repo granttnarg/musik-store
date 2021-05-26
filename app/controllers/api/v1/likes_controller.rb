@@ -16,8 +16,9 @@ class Api::V1::LikesController < ApplicationController
     end
 
     if like.save
-      record.like_count + 1
-      render json: LikeRepresenter.new(like).as_json, status: :created
+      record.like_count += 1
+      record.save
+      render json: {"info": "You successfully liked #{record.title}"} , status: :created
     else
       render json: like.errors.full_messages.join(", "), status: :unprocessable_entity 
     end 
@@ -30,7 +31,8 @@ class Api::V1::LikesController < ApplicationController
       record = Record.find(like.record_id)
       artist = Artist.find(record.artist_id)
       like.destroy
-      record.like_count - 1
+      record.like_count -= 1
+      record.save
       render json: { "status": "You have unliked #{record.title} by #{artist.name}" }, status: :ok
     else
       render status: :bad_request 

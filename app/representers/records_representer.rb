@@ -19,10 +19,10 @@ class RecordsRepresenter
         }
       }
     end
-    binding.pry
+
     records_output.insert(0, {
       meta: {
-        records: records.length
+        total_records: records.length
       }
     })
   end
