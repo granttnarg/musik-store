@@ -2,8 +2,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
-      resources :records, only: [ :index, :create, :destroy ] do 
+      resources :records, only: [ :index, :destroy ] do 
         resources :likes, only:[:create, :destroy]
+      end
+
+      resources :artists, only: [:show] do
+        resources :records, only: [:create]
       end
       
       resources :user, only: [:show] do

@@ -4,7 +4,6 @@ class Api::V1::AuthenticationController < ApplicationController
   rescue_from AuthenticationError, with: :handle_unauthenticated
 
   def create
-    params.require(:password).inspect
     raise AuthenticationError unless user.authenticate(params.require(:password))
     jwt_token = AuthenticationTokenService.call(@user.id)
     render json: { token: jwt_token }, status: :created  

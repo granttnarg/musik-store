@@ -12,20 +12,18 @@ class Api::V1::RecordsController < ApplicationController
 
   def index
     records = Record.limit(limit).offset(params[:offset])
-1
     render json: RecordsRepresenter.new(records).as_json
   end
 
   def create
-    if record_params[:artist_id].present?
-      artist = Artist.find(record_params[:artist_id])
+    if params[:artist_id].present?
+      artist = Artist.find(artist_id[:artist_id].to_i)
     else 
       artist = Artist.create!(artist_params)
     end 
     record = Record.new(record_params.merge(artist_id: artist.id))
-    
     if record.save
-      render json: RecordsRepresenter.new(record).as_json, status: :created
+      render json: RecordsRepresenter.new([record]).as_json, status: :created
     else 
       render json: record.errors.full_messages.join(", "), status: :unprocessable_entity
     end
@@ -55,7 +53,11 @@ class Api::V1::RecordsController < ApplicationController
     params.require(:record).permit(:title, :description, :genre, :album, :artwork_url, :like_count, :id, :artist_id) 
   end 
   
-  def artist_params
-    params.require(:artist).permit(:name, :bio, :id)
+  def artist_id
+    params.permit(:artist_id)
   end
+
+  def artist_params
+    params.require(:artist).permit(:name, :bio) 
+  end 
 end

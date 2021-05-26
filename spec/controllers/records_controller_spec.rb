@@ -14,12 +14,13 @@ RSpec.describe Api::V1::RecordsController, type: :controller do
 
   context 'POST create' do
     let!(:user) { FactoryBot.create(:user, username: "Me", password: "password") }
+    let!(:artist) { FactoryBot.create(:artist, name: "The Best Band") }
     let(:record_params) { {title: "Another Hit Record", genre: "pop", description: "A great description of a hit record"} }
     
     it 'create a record when an auth token and correct info is sent' do
       request.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390"
       expect { post :create, params: {
-        artist: { name: "A Great Artist Name" },
+        artist_id: 1 ,
         record: record_params
         }
       }.to change{ Record.count }.by(1)

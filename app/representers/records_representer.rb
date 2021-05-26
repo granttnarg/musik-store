@@ -1,10 +1,10 @@
 class RecordsRepresenter
   def initialize(records)
-    records.class == Record ? @records = [records] : @records = records
+    @records = records
   end
 
   def as_json
-    records_output = records.map do |record|
+    records_output = @records.map do |record|
       {
         id: record.id,
         title: record.title,
@@ -19,10 +19,9 @@ class RecordsRepresenter
         }
       }
     end
+    binding.pry
     records_output.insert(0, {
       meta: {
-        path: "api/v1/records",
-        endpoint_type: "public",
         records: records.length
       }
     })
