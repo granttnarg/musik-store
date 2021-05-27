@@ -1,4 +1,6 @@
 # README
+http://musik-store.herokuapp.com/
+
 A Ruby on Rails backend Restful API with a basic crud structure and pagination created with TDD and a full test suite, JSON Serialized Endpoints, Seeded Data from the Spotify API and JWT Auth set up ready to go.
 
 Using Rails 6, Ruby 2.6.7 
