@@ -17,6 +17,8 @@ ________________________________________________________________________________
 
 headers: ```{"Authorization" => "Bearer <AUTH_TOKEN>" }```
 
+Sample User >> username: "system_user", password: "qwerty"
+
 Verb | EndPoint | Auth | Required | Description | Output
 ---- | -------- | ---- | -------- | ----------- |------
 POST | /api/v1/authenticate | Public | Authenticate a valid user | ```{ username: "string_value", password: "string_value }``` | ```{'token' => 'JWT_AUTH_TOKEN'}``` 
