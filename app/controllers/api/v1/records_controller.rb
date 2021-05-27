@@ -22,6 +22,7 @@ class Api::V1::RecordsController < ApplicationController
       artist = Artist.create!(artist_params)
     end 
     record = Record.new(record_params.merge(artist_id: artist.id))
+
     if record.save
       render json: RecordsRepresenter.new([record]).as_json, status: :created
     else 
@@ -43,8 +44,8 @@ class Api::V1::RecordsController < ApplicationController
   def authenticate_user
     # Authorization: Bearer <token>
     token, _options = token_and_options(request)
-    user_id = AuthenticationTokenService.decode(token)
-    User.find(user_id)
+    username = AuthenticationTokenService.decode(token)
+    User.find_by(username: username)
   rescue ActiveRecord::RecordNotFound
     render status: :unauthorized
   end

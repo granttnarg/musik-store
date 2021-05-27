@@ -10,34 +10,39 @@ describe 'Likes API', type: :request do
 
   context "GET /likes for user" do
     it "should return an array of likes for a given user with the correct auth" do
-      get "/api/v1/user/#{user.id}/likes", headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390" }
-    
+      get "/api/v1/users/#{user.id}/likes", headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390" }
       expect(response).to have_http_status(:success)
-      expect(response_body.size).to eq(Like.all.size)
-      expect(response_body).to eq([
-        {
-          'id'=> like.id,
-          'user_id' => user.id,
-          'record' => {
-            'title' => record.title,
-            'artist' => artist.name
-          }
-        },
-        {
-          'id'=> like_two.id,
-          'user_id' => user.id,
-          'record' => {
-            'title' => record_two.title,
-            'artist' => artist.name
-          }
-        }
-      ])
+      expect(response_body["likes"].size).to eq(Like.all.size)
+      expect(response_body).to eq({ 
+          'meta': {
+                 'total_likes': 2
+                 },
+                 'likes':[
+                  {
+                    'id'=> like.id,
+                    'user_id' => user.id,
+                    'record' => {
+                      'title' => record.title,
+                      'artist' => artist.name
+                   }
+                 },
+                {
+                  'id'=> like_two.id,
+                  'user_id' => user.id,
+                  'record' => {
+                    'title' => record_two.title,
+                    'artist' => artist.name
+                  }
+                }
+              ]
+            }
+          )
     end    
   end
 
   context "POST delete like" do
     it "It should return a ok and message when a like is removed" do
-      delete "/api/v1/likes/#{like.id}", headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390" }
+      delete "/api/v1/records/#{record.id}/likes/#{like.id}", headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.IdCz91KkIj7SrjjxYTsCiThSTAmJFysugQ5aLZ7O390" }
       expect(response).to have_http_status(:ok) 
       expect(response_body).to eq({"status"=>"You have unliked #{record.title} by #{artist .name}"}) 
       

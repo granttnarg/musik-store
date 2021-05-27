@@ -5,7 +5,7 @@ class Api::V1::AuthenticationController < ApplicationController
 
   def create
     raise AuthenticationError unless user.authenticate(params.require(:password))
-    jwt_token = AuthenticationTokenService.call(@user.id)
+    jwt_token = AuthenticationTokenService.call(@user.username)
     render json: { token: jwt_token }, status: :created  
   end
 

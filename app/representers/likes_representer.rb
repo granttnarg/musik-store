@@ -16,11 +16,13 @@ class LikesRepresenter
           }
         }
      end
-      likes_output.insert(0, {
-        meta: {
-          total_likes: @likes.length
-        }
-      })
+     { 
+       meta: {
+              total_likes: @likes.length
+              },
+              likes: likes_output 
+     }
+
   end
   
   private
