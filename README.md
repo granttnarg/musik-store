@@ -17,7 +17,7 @@ ________________________________________________________________________________
 
 headers: ```{"Authorization" => "Bearer <AUTH_TOKEN>" }```
 
-Sample User >> username: "system_user", password: "qwerty"
+Sample User Info >> ```username: "system_user"``` ```password: "qwerty"```
 
 Verb | EndPoint | Auth | Required | Description | Output
 ---- | -------- | ---- | -------- | ----------- |------
