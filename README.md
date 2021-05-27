@@ -3,16 +3,15 @@ A Ruby on Rails backend Restful API with a basic crud structure and pagination c
 
 Using Rails 6, Ruby 2.6.7 
 
-Don't forget to `bundle` and `rails db:migrate` 
+Don't forget to `bundle` and `rails db:migrate`
+`rails db:seed` to record & artist data 
 
 `bundle exec rspec spec` to run the test suite 
 
 Enjoy! 
 
-Currently in development with extensions to come and soon to be connected to VUE frontend APP....
-
-
-_API STRUCTURE_
+_Currently in development with extensions to come and soon to be connected to VUE frontend APP...._
+________________________________________________________________________________________________
 
 ***All Private endpoints require a header with Auth token from Authorization endpoint for a valid user***
 
