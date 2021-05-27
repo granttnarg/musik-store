@@ -18,7 +18,7 @@ RSpec.describe Api::V1::LikesController, type: :controller do
     it 'does not change like count with invalid record id' do
       request.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1lIn0.se5D8jyHoEwVnR-t2qivsTzTXFW5QsMgncTrAoenSYM"
       expect { post :create, params: {
-        record_id: 99
+        record_id: 99999
         }
       }.to change{ Like.count }.by(0)
     end

@@ -1,5 +1,6 @@
 class Api::V1::LikesController < ApplicationController
   include ActionController::HttpAuthentication::Token
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   before_action :authenticate_user, only: [:index, :create, :destroy]
 
   def index
@@ -44,8 +45,8 @@ class Api::V1::LikesController < ApplicationController
   def authenticate_user
     # Authorization: Bearer <token>
     token, _options = token_and_options(request)
-    user_id = AuthenticationTokenService.decode(token)
-    @current_user = User.find(user_id)
+    username = AuthenticationTokenService.decode(token)
+    @current_user = User.find_by(username: username)
   rescue ActiveRecord::RecordNotFound
     render status: :unauthorized
   end
