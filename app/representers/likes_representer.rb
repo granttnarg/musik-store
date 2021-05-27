@@ -16,12 +16,12 @@ class LikesRepresenter
           }
         }
      end
-     { 
+     {
        meta: {
               total_likes: @likes.length
               },
               likes: likes_output 
-     }
+    }
 
   end
   

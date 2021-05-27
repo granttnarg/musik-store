@@ -4,7 +4,7 @@ RSpec.describe AuthenticationTokenService do
   let(:user) { FactoryBot.create(:user, username: "Mr User", password: "password") }
 
   describe 'call' do
-    let(:token) {described_class.call(user.id)}
+    let(:token) {described_class.call(user.username)}
 
     it 'returns an authentication token' do
       decoded_token = JWT.decode(token,
@@ -14,7 +14,7 @@ RSpec.describe AuthenticationTokenService do
       )
 
       expect(decoded_token).to eq([
-        {'user_id' => user.id},
+        {'username' => user.username},
         {'alg' => 'HS256'}
       ])
     end

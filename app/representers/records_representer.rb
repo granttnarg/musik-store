@@ -19,11 +19,12 @@ class RecordsRepresenter
         }
       }
     end
-    records_output.insert(0, {
+    {
       meta: {
         total_records: records.length
-      }
-    })
+      },
+      records: records_output
+    }
   end
   
   private
