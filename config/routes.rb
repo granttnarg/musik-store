@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  root to: redirect('api/v1/records')
+
   namespace :api do
     namespace :v1 do
-      resources :records, only: [ :index, :destroy ] do 
+      resources :records, only: [:index, :destroy ] do 
         resources :likes, only:[:create, :destroy]
       end
 
